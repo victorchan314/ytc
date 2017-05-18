@@ -1,5 +1,5 @@
 function togglePlay() {
-    chrome.tabs.executeScript(null, {file: "controls.js"});
+    chrome.tabs.executeScript(null, {file: "togglePlay.js"});
 }
 
 function setSpeed(speed) {
