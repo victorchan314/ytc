@@ -13,17 +13,17 @@
                 border: none;
             }
 
-            td .head {
+            td.head {
                 text-align: right;
                 padding-right: 5px;
             }
 
-            td .inputs .submit {
+            td.inputs td.submit {
                 padding: 3px;
             }
 
-            input .numbers {
-                width: 20px;
+            input.numbers {
+                width: 30px;
             }
         </style>
         <script src="popup.js"></script>
@@ -32,7 +32,8 @@
     <body>
         <table id="controls">
             <tr>
-                <button type="button" id="togglePlay">Play/Pause</button><br>
+                <td class="head">Play/Pause</td>
+                <td colspan="2" align="center"><button type="button" id="togglePlay">Play/Pause</button></td>
             </tr>
             <tr>
                 <td class="head">Speed</td>
