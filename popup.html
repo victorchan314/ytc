@@ -8,14 +8,43 @@
                 font-size: 15px;
                 width: 100%;
             }
+
+            #controls {
+                border: none;
+            }
+
+            td .head {
+                text-align: right;
+                padding-right: 5px;
+            }
+
+            td .inputs .submit {
+                padding: 3px;
+            }
+
+            input .numbers {
+                width: 20px;
+            }
         </style>
         <script src="popup.js"></script>
     </head>
 
     <body>
-        <button type="button" id="togglePlay">Play/Pause</button><br>
-        Speed: <input type="text" id="speed">
-        <button type="button" id="submitSpeed">Submit</button>
+        <table id="controls">
+            <tr>
+                <button type="button" id="togglePlay">Play/Pause</button><br>
+            </tr>
+            <tr>
+                <td class="head">Speed</td>
+                <td class="inputs"><input type="text" class="numbers" id="speed"></td>
+                <td class="submit"><button type="button" id="submitSpeed">Submit</button></td>
+            </tr>
+            <tr>
+                <td class="head">Skip</td>
+                <td class="inputs"><input type="text" class="numbers" id="skip"></td>
+                <td class="submit"><button type="button" id="submitSkip">Submit</button></td>
+            </tr>
+        </table>
     </body>
 
 </html>
