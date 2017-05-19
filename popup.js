@@ -76,5 +76,5 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("rightSkip").addEventListener("click", function() {
         skip(1);
     });
-    chrome.tabs.executeScript(null, {code: 'document.getElementsByTagName("video")[0].skip = 5'});
+    chrome.tabs.executeScript(null, {file: "initializeSkip.js"}, showSkip);
 });
