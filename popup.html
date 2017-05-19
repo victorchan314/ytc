@@ -25,6 +25,10 @@
             input.numbers {
                 width: 30px;
             }
+
+            #togglePlay {
+                width: 90%;
+            }
         </style>
         <script src="popup.js"></script>
     </head>
@@ -32,8 +36,8 @@
     <body>
         <table id="controls">
             <tr>
-                <td class="head">Play/Pause</td>
-                <td colspan="2" align="center"><button type="button" id="togglePlay">Play/Pause</button></td>
+                <td class="head" id="playpause"></td>
+                <td colspan="2" align="center"><button type="button" id="togglePlay"></button></td>
             </tr>
             <tr>
                 <td class="head">Speed</td>

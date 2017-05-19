@@ -1,15 +1,26 @@
 function togglePlay() {
     chrome.tabs.executeScript(null, {file: "togglePlay.js"});
+    setPlayPause();
 }
 
 function setSpeed(speed) {
-    alert(speed);
     chrome.tabs.executeScript(null, {
-        code: 'document.getElementById("video")[0].playbackRate = ' + speed;
+        code: 'document.getElementsByTagName("video")[0].playbackRate = ' + speed
     });
 }
 
+function setPlayPause() {
+    if () {
+        document.getElementById("togglePlay").innerText = "Play";
+        document.getElementById("playpause").innerText = "Play";
+    } else {
+        document.getElementById("togglePlay").innerText = "Pause";
+        document.getElementById("playpause").innerText = "Pause";
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function() {
+    setPlayPause();
     document.getElementById("togglePlay").addEventListener("click", togglePlay);
     document.getElementById("submitSpeed").addEventListener("click", function() {
         setSpeed(document.getElementById("speed").value);
