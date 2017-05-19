@@ -9,7 +9,17 @@ function setSpeed(speed) {
 }
 
 function setSkip(skip) {
-    chrome.tabs.executeScript(null, {file: "skipper.js"}, showSkip);
+    chrome.tabs.executeScript(null, {
+        code: 'document.getElementsByTagName("video")[0].skip = ' + skip
+    }, showSkip);
+}
+
+function skip(coefficient) {
+    chrome.tabs.executeScript(null, {
+        code: 'var coefficient = ' + coefficient
+    }, function() {
+        chrome.tabs.executeScript(null, {file: "skipper.js"});
+    });
 }
 
 function setPlayPause(callback) {
@@ -59,6 +69,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     document.getElementById("submitSkip").addEventListener("click", function() {
         setSkip(document.getElementById("skip").value);
+    });
+    document.getElementById("leftSkip").addEventListener("click", function() {
+        skip(-1);
+    });
+    document.getElementById("rightSkip").addEventListener("click", function() {
+        skip(1);
     });
     chrome.tabs.executeScript(null, {code: 'document.getElementsByTagName("video")[0].skip = 5'});
 });
