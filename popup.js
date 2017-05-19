@@ -10,13 +10,15 @@ function setSpeed(speed) {
 }
 
 function setPlayPause() {
-    if () {
-        document.getElementById("togglePlay").innerText = "Play";
-        document.getElementById("playpause").innerText = "Play";
-    } else {
-        document.getElementById("togglePlay").innerText = "Pause";
-        document.getElementById("playpause").innerText = "Pause";
-    }
+    chrome.tabs.executeScript(null, {file: "checkPaused.js"}, function(ret) {
+        if (ret[0]) {
+            document.getElementById("togglePlay").innerText = "Play";
+            document.getElementById("playpause").innerText = "Play";
+        } else {
+            document.getElementById("togglePlay").innerText = "Pause";
+            document.getElementById("playpause").innerText = "Pause";
+        }
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function() {
