@@ -8,6 +8,10 @@ function setSpeed(speed) {
     }, showSpeed);
 }
 
+function setSkip(skip) {
+    chrome.tabs.executeScript(null, {file: "skipper.js"}, showSkip);
+}
+
 function setPlayPause(callback) {
     chrome.tabs.executeScript(null, {
         code: 'var name = "paused"'
@@ -37,10 +41,24 @@ function showSpeed() {
     });
 }
 
+function showSkip() {
+    chrome.tabs.executeScript(null, {
+        code: 'var name = "skip"'
+    }, function() {
+        chrome.tabs.executeScript(null, {file: "retrieveValues.js"}, function(ret) {
+            document.getElementById("skip").value = ret[0];
+        });
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     setPlayPause(showSpeed);
     document.getElementById("togglePlay").addEventListener("click", togglePlay);
     document.getElementById("submitSpeed").addEventListener("click", function() {
         setSpeed(document.getElementById("speed").value);
     });
+    document.getElementById("submitSkip").addEventListener("click", function() {
+        setSkip(document.getElementById("skip").value);
+    });
+    chrome.tabs.executeScript(null, {code: 'document.getElementsByTagName("video")[0].skip = 5'});
 });
