@@ -10,7 +10,7 @@ function setSpeed(speed) {
 
 function setSkip(skip) {
     chrome.tabs.executeScript(null, {
-        code: 'document.getElementsByTagName("video")[0].skip = ' + skip
+        code: 'skip = ' + skip
     }, showSkip);
 }
 
@@ -52,12 +52,8 @@ function showSpeed() {
 }
 
 function showSkip() {
-    chrome.tabs.executeScript(null, {
-        code: 'var name = "skip"'
-    }, function() {
-        chrome.tabs.executeScript(null, {file: "retrieveValues.js"}, function(ret) {
-            document.getElementById("skip").value = ret[0];
-        });
+    chrome.tabs.executeScript(null, {file: "retrieveSkipValue.js"}, function(ret) {
+        document.getElementById("skip").value = ret[0];
     });
 }
 
@@ -76,5 +72,5 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("rightSkip").addEventListener("click", function() {
         skip(1);
     });
-    chrome.tabs.executeScript(null, {file: "initializeSkip.js"}, showSkip);
+    chrome.tabs.executeScript(null, {code: 'if (!skip) {var skip = 5;}'}, showSkip);
 });

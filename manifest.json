@@ -4,7 +4,6 @@
     "name": "YouTube Controls",
     "description": "This extension provides speed and tuning control for YouTube videos.",
     "version": "1.0",
-    "devtools_page": "devtools.html",
 
     "permissions": [
         "https://www.youtube.com/watch*"
