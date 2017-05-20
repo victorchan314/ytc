@@ -74,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
+            alert("hellogoodbye");
             skip(request.coefficient);
     });
     chrome.tabs.executeScript(null, {code: 'if (!skip) {var skip = 5;}'}, showSkip);

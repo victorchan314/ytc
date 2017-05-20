@@ -1,9 +1,9 @@
-chrome.commands.onCommand.addListener(function(command) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+document.addEventListener("DOMContentLoaded", function() {
+    chrome.commands.onCommand.addListener(function(command) {
         if (command == "leftSkip") {
-            chrome.tabs.sendMessage(tabs[0].id, {coefficient: -1});
+            chrome.runtime.sendMessage({coefficient: -1});
         } else if (command == "rightSkip") {
-            chrome.tabs.sendMessage(tabs[0].id, {coefficient: 1});
+            chrome.runtime.sendMessage({coefficient: 1});
         }
     });
 });
