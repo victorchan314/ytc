@@ -1,21 +1,5 @@
 var background = chrome.extension.getBackgroundPage();
 
-function togglePlay() {
-    chrome.tabs.executeScript({file: "togglePlay.js"}, setPlayPause);
-}
-
-function setSpeed(speed) {
-    chrome.tabs.executeScript({
-        code: 'document.getElementsByTagName("video")[0].playbackRate = ' + speed
-    }, showSpeed);
-}
-
-function setSkip(skip) {
-    chrome.tabs.executeScript({
-        code: 'document.getElementsByTagName("video")[0].skip = ' + skip
-    }, showSkip);
-}
-
 function setPlayPause(callback) {
     chrome.tabs.executeScript({
         code: 'var name = "paused"'
@@ -53,12 +37,12 @@ function showSkip() {
 
 document.addEventListener("DOMContentLoaded", function() {
     setPlayPause(showSpeed);
-    document.getElementById("togglePlay").addEventListener("click", togglePlay);
+    document.getElementById("togglePlay").addEventListener("click", function() {background.togglePlay(setPlayPause);});
     document.getElementById("submitSpeed").addEventListener("click", function() {
-        setSpeed(document.getElementById("speed").value);
+        background.setSpeed(document.getElementById("speed").value);
     });
     document.getElementById("submitSkip").addEventListener("click", function() {
-        setSkip(document.getElementById("skip").value);
+        background.setSkip(document.getElementById("skip").value);
     });
     document.getElementById("leftSkip").addEventListener("click", function() {
         background.skip(-1);
