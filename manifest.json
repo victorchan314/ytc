@@ -23,15 +23,15 @@
     "commands": {
         "leftSkip": {
             "suggested_key": {
-                "default": "Ctrl+U",
-                "mac": "Command+Shift+U"
+                "default": "Ctrl+Shift+Left",
+                "mac": "Command+Shift+Left"
             },
             "description": "Skip backwards"
         },
         "rightSkip": {
             "suggested_key": {
-                "default": "Ctrl+O",
-                "mac": "Command+Shift+O"
+                "default": "Ctrl+Shift+Right",
+                "mac": "Command+Shift+Right"
             },
             "description": "Skip forwards"
         }
