@@ -9,9 +9,28 @@
         "https://www.youtube.com/watch*"
     ],
 
+    "background": {
+        "scripts": ["background.js"]
+    },
+
     "browser_action": {
         "default_icon": "icon.png",
         "default_popup": "popup.html",
         "default_title": "YouTube Controls"
+    },
+
+    "commands": {
+        "leftSkip": {
+            "suggested_key": {
+                "default": "U"
+            },
+            "description": "Skip backwards"
+        },
+        "rightSkip": {
+            "suggested_key": {
+                "default": "O"
+            },
+            "description": "Skip forwards"
+        }
     }
 }
