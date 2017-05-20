@@ -1,13 +1,12 @@
-function skip(coefficient) {
+function skip(coefficient, callback) {
     chrome.tabs.executeScript(null, {
         code: 'var coefficient = ' + coefficient
     }, function() {
         chrome.tabs.executeScript(null, {file: "skipper.js"});
     });
+    callback();
 }
 
-chrome.tabs.executeScript({code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 5;}'});
-chrome.tabs.executeScript({code: 'alert("hi")'});
 chrome.commands.onCommand.addListener(function(command) {
     if (command == "leftSkip") {
         skip(-1);
