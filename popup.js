@@ -72,5 +72,9 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("rightSkip").addEventListener("click", function() {
         skip(1);
     });
+    chrome.runtime.onMessage.addListener(
+        function(request, sender, sendResponse) {
+            skip(request.coefficient);
+    });
     chrome.tabs.executeScript(null, {code: 'if (!skip) {var skip = 5;}'}, showSkip);
 });
