@@ -1,4 +1,4 @@
 function retrieveSkipValue() {
-    return skip;
+    return document.getElementsByTagName("video")[0].skip;
 }
 retrieveSkipValue();
