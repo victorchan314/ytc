@@ -22,13 +22,13 @@
     "commands": {
         "leftSkip": {
             "suggested_key": {
-                "default": "U"
+                "default": "Ctrl+U"
             },
             "description": "Skip backwards"
         },
         "rightSkip": {
             "suggested_key": {
-                "default": "O"
+                "default": "Ctrl+O"
             },
             "description": "Skip forwards"
         }
