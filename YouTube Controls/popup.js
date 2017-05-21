@@ -1,4 +1,4 @@
-var background = chrome.extension.getBackgroundPage();
+var background = chrome.runtime.getBackgroundPage();
 
 function setPlayPause(callback) {
     chrome.tabs.executeScript({
