@@ -37,7 +37,9 @@ function showSkip() {
 
 document.addEventListener("DOMContentLoaded", function() {
     setPlayPause(showSpeed);
-    document.getElementById("togglePlay").addEventListener("click", function() {background.togglePlay(setPlayPause);});
+    document.getElementById("togglePlay").addEventListener("click", function() {
+        background.togglePlay(setPlayPause);
+    });
     document.getElementById("submitSpeed").addEventListener("click", function() {
         background.setSpeed(document.getElementById("speed").value);
     });
