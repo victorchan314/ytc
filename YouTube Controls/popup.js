@@ -57,4 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     showSkip();
 //    chrome.tabs.executeScript({code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 0;}'}, showSkip);
+    document.getElementById("toggleSkipAd").addEventListener("click", function() {
+        background.skipAd();
+    });
 });
