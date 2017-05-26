@@ -23,6 +23,10 @@ function skip(coefficient) {
     });
 }
 
+function skipAd() {
+    chrome.tabs.executeScript({file: "skipAd.js"});
+}
+
 chrome.commands.onCommand.addListener(function(command) {
     if (command == "leftSkip") {
         skip(-1);
