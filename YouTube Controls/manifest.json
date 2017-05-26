@@ -6,7 +6,9 @@
     "version": "1.0",
 
     "permissions": [
-        "https://www.youtube.com/watch*"
+        "https://www.youtube.com/watch*",
+        "webNavigation",
+        "tabs"
     ],
 
     "background": {

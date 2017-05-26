@@ -1,4 +1,7 @@
-var background = chrome.runtime.getBackgroundPage();
+var background;
+chrome.runtime.getBackgroundPage(function(backgroundPage) {
+    background = backgroundPage;
+});
 
 function setPlayPause(callback) {
     chrome.tabs.executeScript({
@@ -52,5 +55,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("rightSkip").addEventListener("click", function() {
         background.skip(1);
     });
-    chrome.tabs.executeScript({code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 0;}'}, showSkip);
+    showSkip();
+//    chrome.tabs.executeScript({code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 0;}'}, showSkip);
 });
