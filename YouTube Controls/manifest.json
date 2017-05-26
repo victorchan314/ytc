@@ -7,7 +7,6 @@
 
     "permissions": [
         "https://www.youtube.com/watch*",
-        "webNavigation",
         "tabs"
     ],
 
