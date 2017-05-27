@@ -34,12 +34,11 @@ chrome.commands.onCommand.addListener(function(command) {
         skip(1);
     }
 });
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if (changeInfo.status == 'complete' && tab.url.startsWith('https://www.youtube.com/watch')) {
-        chrome.tabs.executeScript({
-            code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 5;}'
-        });
-    }
+chrome.webNavigation.onCommitted.addListener(function(details) {
+    alert('hello');
+    chrome.tabs.executeScript({
+        code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 5;}'
+    });
 });
 chrome.runtime.onInstalled.addListener(function(details) {
     chrome.tabs.query({}, function(tabs) {
