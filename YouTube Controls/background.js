@@ -52,3 +52,16 @@ chrome.runtime.onInstalled.addListener(function(details) {
         }
     });
 });
+chrome.management.onEnabled.addListener(function(info) {
+    if (info.id == 'hkmnecmckipaggdeagodpjammbnfijan') {
+        chrome.tabs.query({}, function(tabs) {
+            for (var i = 0; i < tabs.length; i++) {
+                if (tabs[i].url.startsWith('https://www.youtube.com/watch')) {
+                    chrome.tabs.executeScript(tabs[i].id, {
+                        code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 5;}'
+                    });
+                }
+            }
+        });
+    }
+});
