@@ -39,6 +39,8 @@ chrome.webNavigation.onCommitted.addListener(function(details) {
     chrome.tabs.executeScript({
         code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 5;}'
     });
+}, {
+    url: [{urlContains: 'https://www.youtube.com/'}]
 });
 chrome.runtime.onInstalled.addListener(function(details) {
     chrome.tabs.query({}, function(tabs) {
