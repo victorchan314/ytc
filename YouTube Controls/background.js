@@ -41,3 +41,14 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         });
     }
 });
+chrome.runtime.onInstalled.addListener(function(details) {
+    chrome.tabs.query({}, function(tabs) {
+        for (var i = 0; i < tabs.length; i++) {
+            if (tabs[i].url.startsWith('https://www.youtube.com/watch')) {
+                chrome.tabs.executeScript(tabs[i].id, {
+                    code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 5;}'
+                });
+            }
+        }
+    });
+});
