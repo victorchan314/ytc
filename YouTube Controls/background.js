@@ -65,3 +65,6 @@ chrome.management.onEnabled.addListener(function(info) {
         });
     }
 });
+chrome.runtime.onInstalled.addListener(function() {
+
+});

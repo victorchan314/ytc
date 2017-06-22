@@ -8,7 +8,8 @@
     "permissions": [
         "https://www.youtube.com/watch*",
         "tabs",
-        "management"
+        "management",
+        "declarativeContent"
     ],
 
     "background": {
