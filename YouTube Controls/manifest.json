@@ -7,6 +7,7 @@
 
     "permissions": [
         "https://www.youtube.com/watch*",
+        "https://www.youtube.com/c/*/live",
         "tabs",
         "management",
         "declarativeContent"
