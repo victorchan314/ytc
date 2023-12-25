@@ -4,47 +4,35 @@ chrome.runtime.getBackgroundPage((backgroundPage) => {
 });
 
 function setPlayPause(callback) {
-    chrome.tabs.executeScript({
-        code: "var name = \"paused\";",
-    }, () => {
-        chrome.tabs.executeScript({file: "retrieveValues.js"}, (ret) => {
-            if (ret[0]) {
-                document.getElementById("togglePlay").innerText = "Play";
-                document.getElementById("playpause").innerText = "Play";
-            } else {
-                document.getElementById("togglePlay").innerText = "Pause";
-                document.getElementById("playpause").innerText = "Pause";
-            }
-            if (callback) {
-                callback();
-            }
-        });
+    chrome.tabs.executeScript({code: "retrieveValue(\"paused\")"}, (ret) => {
+        if (ret[0]) {
+            document.getElementById("togglePlay").innerText = "Play";
+            document.getElementById("playpause").innerText = "Play";
+        } else {
+            document.getElementById("togglePlay").innerText = "Pause";
+            document.getElementById("playpause").innerText = "Pause";
+        }
+        if (callback) {
+            callback();
+        }
     });
 }
 
 function showSpeed(callback) {
-    chrome.tabs.executeScript({
-        code: "var name = \"playbackRate\";",
-    }, () => {
-        chrome.tabs.executeScript({file: "retrieveValues.js"}, (ret) => {
-            document.getElementById("speed").value = ret[0];
-            if (callback) {
-                callback();
-            }
-        });
+    chrome.tabs.executeScript({code: "retrieveValue(\"playbackRate\")"}, (ret) => {
+        document.getElementById("speed").value = ret[0];
+        if (callback) {
+            callback();
+        }
     });
 }
 
 function showSkip(callback) {
-    chrome.tabs.executeScript({
-        code: "var name = \"skip\";",
-    }, () => {
-        chrome.tabs.executeScript({file: "retrieveValues.js"}, (ret) => {
-            document.getElementById("skip").value = ret[0] || 5;
-            if (callback) {
-                callback();
-            }
-        });
+    chrome.tabs.executeScript({code: "retrieveValue(\"skip\")"}, (ret) => {
+        document.getElementById("skip").value = ret[0] || 5;
+        if (callback) {
+            callback();
+        }
     });
 }
 

@@ -1,5 +1,5 @@
 function togglePlay(callback) {
-    chrome.tabs.executeScript({file: "togglePlay.js"});
+    chrome.tabs.executeScript({code: "togglePlay()"});
     callback();
 }
 
@@ -16,15 +16,11 @@ function setSkip(skip) {
 }
 
 function skip(coefficient) {
-    chrome.tabs.executeScript({
-        code: "var coefficient = " + coefficient,
-    }, function() {
-        chrome.tabs.executeScript({file: "skipper.js"});
-    });
+    chrome.tabs.executeScript({code: `skipVideo(${coefficient})`});
 }
 
 function skipAd() {
-    chrome.tabs.executeScript({file: "skipAd.js"});
+    chrome.tabs.executeScript({code: "skipAd()"});
 }
 
 chrome.commands.onCommand.addListener(function(command) {
