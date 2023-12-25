@@ -1,13 +1,13 @@
 var background;
-chrome.runtime.getBackgroundPage(function(backgroundPage) {
+chrome.runtime.getBackgroundPage((backgroundPage) => {
     background = backgroundPage;
 });
 
 function setPlayPause(callback) {
     chrome.tabs.executeScript({
-        code: 'var name = "paused"'
-    }, function() {
-        chrome.tabs.executeScript({file: "retrieveValues.js"}, function(ret) {
+        code: "var name = \"paused\";",
+    }, () => {
+        chrome.tabs.executeScript({file: "retrieveValues.js"}, (ret) => {
             if (ret[0]) {
                 document.getElementById("togglePlay").innerText = "Play";
                 document.getElementById("playpause").innerText = "Play";
@@ -22,46 +22,44 @@ function setPlayPause(callback) {
     });
 }
 
-function showSpeed() {
+function showSpeed(callback) {
     chrome.tabs.executeScript({
-        code: 'var name = "playbackRate"'
-    }, function() {
-        chrome.tabs.executeScript({file: "retrieveValues.js"}, function(ret) {
+        code: "var name = \"playbackRate\";",
+    }, () => {
+        chrome.tabs.executeScript({file: "retrieveValues.js"}, (ret) => {
             document.getElementById("speed").value = ret[0];
+            if (callback) {
+                callback();
+            }
         });
     });
 }
 
-function showSkip() {
+function showSkip(callback) {
     chrome.tabs.executeScript({
-        code: 'var name = "skip"'
-    }, function () {
-        chrome.tabs.executeScript({file: "retrieveValues.js"}, function(ret) {
-            document.getElementById("skip").value = ret[0];
+        code: "var name = \"skip\";",
+    }, () => {
+        chrome.tabs.executeScript({file: "retrieveValues.js"}, (ret) => {
+            document.getElementById("skip").value = ret[0] || 5;
+            if (callback) {
+                callback();
+            }
         });
     });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    setPlayPause(showSpeed);
-    document.getElementById("togglePlay").addEventListener("click", function() {
-        background.togglePlay(setPlayPause);
-    });
-    document.getElementById("submitSpeed").addEventListener("click", function() {
-        background.setSpeed(document.getElementById("speed").value);
-    });
-    document.getElementById("submitSkip").addEventListener("click", function() {
-        background.setSkip(document.getElementById("skip").value);
-    });
-    document.getElementById("leftSkip").addEventListener("click", function() {
-        background.skip(-1);
-    });
-    document.getElementById("rightSkip").addEventListener("click", function() {
-        background.skip(1);
-    });
-    showSkip();
-//    chrome.tabs.executeScript({code: 'var video = document.getElementsByTagName("video")[0]; if (!video.skip) {video.skip = 0;}'}, showSkip);
-    document.getElementById("toggleSkipAd").addEventListener("click", function() {
-        background.skipAd();
-    });
+document.addEventListener("DOMContentLoaded", () => {
+    setPlayPause(() => showSpeed(showSkip));
+    document.getElementById("togglePlay").addEventListener("click", () =>
+        background.togglePlay(setPlayPause));
+    document.getElementById("submitSpeed").addEventListener("click", () =>
+        background.setSpeed(document.getElementById("speed").value));
+    document.getElementById("submitSkip").addEventListener("click", () =>
+        background.setSkip(document.getElementById("skip").value));
+    document.getElementById("leftSkip").addEventListener("click", () =>
+        background.skip(-1));
+    document.getElementById("rightSkip").addEventListener("click", () =>
+        background.skip(1));
+    document.getElementById("toggleSkipAd").addEventListener("click", () =>
+        background.skipAd());
 });

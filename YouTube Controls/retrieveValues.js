@@ -1,4 +1,1 @@
-function returnProperty() {
-    return document.getElementsByTagName("video")[0][name];
-}
-returnProperty();
+(() => document.getElementsByTagName("video")[0][name])();
