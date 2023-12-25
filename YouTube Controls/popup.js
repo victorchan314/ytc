@@ -23,7 +23,7 @@ function setPlayPause(callback) {
 }
 
 function showSpeed() {
-    chrome.tabs.executeScript(null, {
+    chrome.tabs.executeScript({
         code: 'var name = "playbackRate"'
     }, function() {
         chrome.tabs.executeScript({file: "retrieveValues.js"}, function(ret) {
@@ -33,8 +33,12 @@ function showSpeed() {
 }
 
 function showSkip() {
-    chrome.tabs.executeScript({file: "retrieveSkipValue.js"}, function(ret) {
-        document.getElementById("skip").value = ret[0];
+    chrome.tabs.executeScript({
+        code: 'var name = "skip"'
+    }, function () {
+        chrome.tabs.executeScript({file: "retrieveValues.js"}, function(ret) {
+            document.getElementById("skip").value = ret[0];
+        });
     });
 }
 

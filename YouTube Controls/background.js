@@ -36,6 +36,8 @@ chrome.commands.onCommand.addListener(function(command) {
         skip(-1);
     } else if (command == "rightSkip") {
         skip(1);
+    } else if (command === "skipAds") {
+        skipAd();
     }
 });
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {

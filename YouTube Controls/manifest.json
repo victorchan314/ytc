@@ -38,6 +38,13 @@
                 "mac": "Alt+Right"
             },
             "description": "Skip forwards"
+        },
+        "skipAds": {
+            "suggested_key": {
+                "default": "Alt+Down",
+                "mac": "Alt+Down"
+            },
+            "description": "Skip ads"
         }
     }
 }
