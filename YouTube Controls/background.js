@@ -33,6 +33,37 @@ chrome.commands.onCommand.addListener(function(command) {
     }
 });
 
+
+function urlIsVideo(url) {
+    return url.startsWith("https://www.youtube.com/watch") || (url.startsWith("https://www.youtube.com/c/") && url.endsWith("/live"));
+}
+
+function injectIntoAllTabs() {
+    chrome.tabs.query({}, function(tabs) {
+        for (var i = 0; i < tabs.length; i++) {
+            if (urlIsVideo(tabs[i].url)) {
+                chrome.tabs.executeScript(tabs[i].id, {file: "contentScript.js"});
+            }
+        }
+    });
+}
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    if (changeInfo.status == 'complete' && urlIsVideo(tab.url)) {
+        chrome.tabs.executeScript(tabId, {file: "contentScript.js"});
+    }
+});
+
+chrome.runtime.onInstalled.addListener(function(details) {
+    injectIntoAllTabs();
+});
+
+chrome.management.onEnabled.addListener(function(info) {
+    if (info.id == 'hkmnecmckipaggdeagodpjammbnfijan') {
+        injectIntoAllTabs();
+    }
+});
+
 chrome.runtime.onInstalled.addListener(function() {
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
         chrome.declarativeContent.onPageChanged.addRules([{
