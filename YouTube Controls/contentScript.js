@@ -43,6 +43,10 @@ async function videoEventListener(event) {
         currentUrl = event.target.src;
         await skipAd();
         console.log("Skipped an ad...");
+
+        if (document.getElementsByTagName("body")[0].videoSpeed !== undefined) {
+            document.getElementsByTagName("video")[0].playbackRate = document.getElementsByTagName("body")[0].videoSpeed;
+        }
     }
     listenForVideoSrcChanges(event.target);
 }

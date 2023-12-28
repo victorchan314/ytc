@@ -5,13 +5,13 @@ function togglePlay(callback) {
 
 function setSpeed(speed) {
     chrome.tabs.executeScript({
-        code: "document.getElementsByTagName(\"video\")[0].playbackRate = " + speed,
+        code: `document.getElementsByTagName("video")[0].playbackRate = ${speed}; document.getElementsByTagName("body")[0].videoSpeed = ${speed};`,
     });
 }
 
 function setSkip(skip) {
     chrome.tabs.executeScript({
-        code: "document.getElementsByTagName(\"video\")[0].skip = " + skip,
+        code: `document.getElementsByTagName("video")[0].skip = ${skip}`,
     });
 }
 
