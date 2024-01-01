@@ -1,7 +1,5 @@
 var background;
-chrome.runtime.getBackgroundPage((backgroundPage) => {
-    background = backgroundPage;
-});
+chrome.runtime.getBackgroundPage((backgroundPage) => background = backgroundPage);
 
 function setPlayPause(callback) {
     chrome.tabs.executeScript({code: "retrieveValue(\"paused\")"}, (ret) => {

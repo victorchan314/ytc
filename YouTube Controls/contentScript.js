@@ -2,8 +2,12 @@ function retrieveValue(name) {
     return document.getElementsByTagName("video")[0][name];
 }
 
-async function skipAd() {
-    if (document.querySelector("div.html5-video-player").classList.contains("ad-showing")) {
+function isAdShowing() {
+    return document.querySelector("div.html5-video-player").classList.contains("ad-showing");
+}
+
+async function skipSingleAd() {
+    if (isAdShowing()) {
         console.log(`Ad source: ${document.getElementsByTagName("video")[0].src}`);
         let skipAdButton;
         if (skipAdButton = document.querySelector("div.ytp-ad-skip-button-slot > span.ytp-ad-skip-button-container")) {
@@ -16,6 +20,14 @@ async function skipAd() {
             video.currentTime = video.duration;
             console.log("Skipped video ad");
         }
+    }
+}
+
+async function skipAllAds() {
+    const start = Date.now();
+    while (isAdShowing() && Date.now() - start < 10000) {
+        await new Promise((r) => setTimeout(r, 100));
+        await skipSingleAd();
     }
 }
 
@@ -38,11 +50,10 @@ async function videoEventListener(event) {
     if (event.target.src !== currentUrl) {
         console.log(`Current: ${currentUrl}`);
         console.log(`New: ${event.target.src}`);
-        console.log("Skipping an ad...");
-        await new Promise((r) => setTimeout(r, 100));
+        console.log("Skipping all ads...");
         currentUrl = event.target.src;
-        await skipAd();
-        console.log("Skipped an ad...");
+        await skipAllAds();
+        console.log("Skipped all ads...");
 
         if (document.getElementsByTagName("body")[0].videoSpeed !== undefined) {
             document.getElementsByTagName("video")[0].playbackRate = document.getElementsByTagName("body")[0].videoSpeed;

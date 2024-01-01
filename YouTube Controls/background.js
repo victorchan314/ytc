@@ -20,7 +20,7 @@ function skip(coefficient) {
 }
 
 function skipAd() {
-    chrome.tabs.executeScript({code: "skipAd()"});
+    chrome.tabs.executeScript({code: "skipSingleAd()"});
 }
 
 chrome.commands.onCommand.addListener(function(command) {
