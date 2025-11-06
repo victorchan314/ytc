@@ -1,14 +1,22 @@
+function getVideo() {
+    return document.getElementsByTagName("video")[0];
+}
+
 function retrieveValue(name) {
-    return document.getElementsByTagName("video")[0][name];
+    return getVideo()[name];
 }
 
 function isAdShowing() {
     return document.querySelector("div.html5-video-player").classList.contains("ad-showing");
 }
 
+function areCaptionsShowing() {
+    return document.querySelector("button.ytp-subtitles-button").getAttribute("aria-pressed") === "true";
+}
+
 async function skipSingleAd() {
     if (isAdShowing()) {
-        console.log(`Ad source: ${document.getElementsByTagName("video")[0].src}`);
+        console.log(`Ad source: ${getVideo().src}`);
         let skipAdButton;
         if (skipAdButton = document.querySelector("div.ytp-ad-skip-button-slot > span.ytp-ad-skip-button-container")) {
             console.log("Clicking skip ad button");
@@ -16,7 +24,7 @@ async function skipSingleAd() {
             console.log("Clicked skip ad button");
         } else {
             console.log("Skipping video ad");
-            var video = document.getElementsByTagName("video")[0];
+            var video = getVideo();
             video.currentTime = video.duration;
             console.log("Skipped video ad");
         }
@@ -32,12 +40,12 @@ async function skipAllAds() {
 }
 
 function skipVideo(coefficient) {
-    var video = document.getElementsByTagName("video")[0];
-    video.currentTime = video.currentTime + video.playbackRate*(video.skip || 5)*coefficient;
+    var video = getVideo();
+    video.currentTime = video.currentTime + video.playbackRate * (video.skip || 5) * coefficient;
 }
 
 function togglePlay() {
-    var video = document.getElementsByTagName("video")[0];
+    var video = getVideo();
     if (video.paused) {
         video.play();
     } else {
@@ -56,7 +64,7 @@ async function videoEventListener(event) {
         console.log("Skipped all ads...");
 
         if (document.getElementsByTagName("body")[0].videoSpeed !== undefined) {
-            document.getElementsByTagName("video")[0].playbackRate = document.getElementsByTagName("body")[0].videoSpeed;
+            getVideo().playbackRate = document.getElementsByTagName("body")[0].videoSpeed;
         }
     }
     listenForVideoSrcChanges(event.target);
@@ -68,6 +76,10 @@ function listenForVideoSrcChanges(video) {
     video.addEventListener("loadedmetadata", videoEventListener);
 }
 
-var currentVideo = document.getElementsByTagName("video")[0];
+var currentVideo = getVideo();
 var currentUrl = currentVideo.src;
-listenForVideoSrcChanges(currentVideo);
+//listenForVideoSrcChanges(currentVideo);
+
+//currentVideo.addEventListener("loadstart", () => console.log("Inside loadstart"));
+var captionsShowing = areCaptionsShowing();
+

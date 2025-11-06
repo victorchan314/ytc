@@ -1,35 +1,22 @@
-function togglePlay(callback) {
-    chrome.tabs.executeScript({code: "togglePlay()"});
-    callback();
-}
-
-function setSpeed(speed) {
-    chrome.tabs.executeScript({
-        code: `document.getElementsByTagName("video")[0].playbackRate = ${speed}; document.getElementsByTagName("body")[0].videoSpeed = ${speed};`,
+async function executeScript(func) {
+    return await chrome.scripting.executeScript({
+        target: {
+            tabId: (await chrome.tabs.query({
+                active: true,
+                lastFocusedWindow: true,
+            }))[0].id,
+        },
+        func,
     });
 }
 
-function setSkip(skip) {
-    chrome.tabs.executeScript({
-        code: `document.getElementsByTagName("video")[0].skip = ${skip}`,
-    });
-}
-
-function skip(coefficient) {
-    chrome.tabs.executeScript({code: `skipVideo(${coefficient})`});
-}
-
-function skipAd() {
-    chrome.tabs.executeScript({code: "skipSingleAd()"});
-}
-
-chrome.commands.onCommand.addListener(function(command) {
+chrome.commands.onCommand.addListener(async (command) => {
     if (command === "leftSkip") {
-        skip(-1);
+        await executeScript(() => skipVideo(-1));
     } else if (command === "rightSkip") {
-        skip(1);
+        await executeScript(() => skipVideo(1));
     } else if (command === "skipAds") {
-        skipAd();
+        await executeScript(() => skipSingleAd());
     }
 });
 
@@ -38,29 +25,37 @@ function urlIsVideo(url) {
     return url.startsWith("https://www.youtube.com/watch") || (url.startsWith("https://www.youtube.com/c/") && url.endsWith("/live"));
 }
 
-function injectIntoAllTabs() {
-    chrome.tabs.query({}, function(tabs) {
-        for (var i = 0; i < tabs.length; i++) {
-            if (urlIsVideo(tabs[i].url)) {
-                chrome.tabs.executeScript(tabs[i].id, {file: "contentScript.js"});
-            }
+async function injectIntoAllTabs() {
+    const tabs = await chrome.tabs.query({});
+    tabs.forEach(async (tab) => {
+        if (urlIsVideo(tab.url)) {
+            await chrome.scripting.executeScript({
+                target: {
+                    tabId: tab.id,
+                },
+                files: ["contentScript.js"],
+            });
         }
     });
 }
 
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if (changeInfo.status == 'complete' && urlIsVideo(tab.url)) {
-        chrome.tabs.executeScript(tabId, {file: "contentScript.js"});
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+    if (changeInfo.status === "complete" && urlIsVideo(tab.url)) {
+        await chrome.scripting.executeScript({
+            target: {
+                tabId,
+            },
+            files: ["contentScript.js"],
+        });
     }
 });
 
-chrome.runtime.onInstalled.addListener(function(details) {
-    injectIntoAllTabs();
-});
+chrome.runtime.onInstalled.addListener(async (details) =>
+    await injectIntoAllTabs());
 
-chrome.management.onEnabled.addListener(function(info) {
+chrome.management.onEnabled.addListener(async (info) => {
     if (info.id == 'hkmnecmckipaggdeagodpjammbnfijan') {
-        injectIntoAllTabs();
+        await injectIntoAllTabs();
     }
 });
 
@@ -82,3 +77,4 @@ chrome.runtime.onInstalled.addListener(function() {
         }]);
     });
 });
+
