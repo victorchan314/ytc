@@ -8,7 +8,6 @@
         "declarativeContent",
         "management",
         "scripting",
-        "storage",
         "tabs"
     ],
     "host_permissions": [

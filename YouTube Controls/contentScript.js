@@ -40,12 +40,12 @@ async function skipAllAds() {
 }
 
 function skipVideo(coefficient) {
-    var video = getVideo();
+    const video = getVideo();
     video.currentTime = video.currentTime + video.playbackRate * (video.skip || 5) * coefficient;
 }
 
 function togglePlay() {
-    var video = getVideo();
+    const video = getVideo();
     if (video.paused) {
         video.play();
     } else {

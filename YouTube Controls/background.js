@@ -1,10 +1,11 @@
 async function executeScript(func) {
-    return await chrome.scripting.executeScript({
+    const tab = (await chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true,
+    }))[0];
+    return tab && urlIsVideo(tab.url) && await chrome.scripting.executeScript({
         target: {
-            tabId: (await chrome.tabs.query({
-                active: true,
-                lastFocusedWindow: true,
-            }))[0].id,
+            tabId: tab.id,
         },
         func,
     });
@@ -50,11 +51,11 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     }
 });
 
-chrome.runtime.onInstalled.addListener(async (details) =>
+chrome.runtime.onInstalled.addListener(async () =>
     await injectIntoAllTabs());
 
 chrome.management.onEnabled.addListener(async (info) => {
-    if (info.id == 'hkmnecmckipaggdeagodpjammbnfijan') {
+    if (info.id === chrome.runtime.id) {
         await injectIntoAllTabs();
     }
 });
