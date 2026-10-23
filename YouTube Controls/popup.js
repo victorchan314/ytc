@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("submitSpeed").addEventListener("click", async () => {
         await executeScript((speed) => {
             getVideo().playbackRate = speed;
- 59         // document.getElementsByTagName("body")[0].videoSpeed = speed;
+            // document.getElementsByTagName("body")[0].videoSpeed = speed;
         }, [document.getElementById("speed").value]);
         await showSpeed();
     });
