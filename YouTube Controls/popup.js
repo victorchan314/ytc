@@ -42,13 +42,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     document.getElementById("submitSpeed").addEventListener("click", async () => {
         await executeScript((speed) => {
-            getVideo().playbackRate = speed;
-            // document.getElementsByTagName("body")[0].videoSpeed = speed;
-        }, [document.getElementById("speed").value]);
+            const video = getVideo();
+            video.playbackRate = speed;
+            video.desiredSpeed = speed;
+        }, [Number(document.getElementById("speed").value)]);
         await showSpeed();
     });
     document.getElementById("submitSkip").addEventListener("click", async () => {
-        await executeScript((skip) => getVideo().skip = skip, [document.getElementById("skip").value]);
+        await executeScript((skip) => getVideo().skip = skip, [Number(document.getElementById("skip").value)]);
         await showSkip();
     });
     document.getElementById("leftSkip").addEventListener("click",

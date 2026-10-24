@@ -4,8 +4,10 @@
     }
     window.youtubeControlsLoaded = true;
 
+    let wasAdShowing = false;
+
     function getVideo() {
-        return document.getElementsByTagName("video")[0];
+        return document.querySelector("#movie_player video");
     }
 
     function retrieveValue(name) {
@@ -13,11 +15,7 @@
     }
 
     function isAdShowing() {
-        return document.querySelector("div.html5-video-player").classList.contains("ad-showing");
-    }
-
-    function areCaptionsShowing() {
-        return document.querySelector("button.ytp-subtitles-button").getAttribute("aria-pressed") === "true";
+        return document.querySelector("#movie_player")?.classList.contains("ad-showing");
     }
 
     async function skipSingleAd() {
@@ -59,35 +57,37 @@
         }
     }
 
+    function isMainPlayer(video) {
+        return video.closest("#movie_player") !== null;
+    }
 
-    async function videoEventListener(event) {
-        if (event.target.src !== currentUrl) {
-            console.log(`Current: ${currentUrl}`);
-            console.log(`New: ${event.target.src}`);
-            console.log("Skipping all ads...");
-            currentUrl = event.target.src;
-            await skipAllAds();
-            console.log("Skipped all ads...");
-
-            if (document.getElementsByTagName("body")[0].videoSpeed !== undefined) {
-                getVideo().playbackRate = document.getElementsByTagName("body")[0].videoSpeed;
+    function videoEventListener(event) {
+        const video = event.target;
+        if (!isMainPlayer(video)) {
+            return;
+        }
+        if (isAdShowing()) {
+            wasAdShowing = true;
+        } else if (wasAdShowing) {
+            wasAdShowing = false;
+            if (video.desiredSpeed && video.playbackRate !== video.desiredSpeed) {
+                console.log(`Reapplying speed ${video.desiredSpeed}`);
+                video.playbackRate = video.desiredSpeed;
             }
         }
-        listenForVideoSrcChanges(event.target);
     }
 
-    function listenForVideoSrcChanges(video) {
-        currentVideo.removeEventListener("loadedmetadata", videoEventListener);
-        currentVideo = video;
-        video.addEventListener("loadedmetadata", videoEventListener);
+    function onRateChange(event) {
+        const video = event.target;
+        // After an ad, YouTube restores its menu speed before playing the video again, so wasAdShowing is still true
+        if (isMainPlayer(video) && !isAdShowing() && !wasAdShowing) {
+            video.desiredSpeed = video.playbackRate;
+        }
     }
 
-    //var currentVideo = getVideo();
-    //var currentUrl = currentVideo.src;
-    //listenForVideoSrcChanges(currentVideo);
-
-    //currentVideo.addEventListener("loadstart", () => console.log("Inside loadstart"));
-    //var captionsShowing = areCaptionsShowing();
+    document.addEventListener("loadedmetadata", videoEventListener, true);
+    document.addEventListener("playing", videoEventListener, true);
+    document.addEventListener("ratechange", onRateChange, true);
 
     Object.assign(window, {
         getVideo,
