@@ -5,7 +5,6 @@
     "description": "This extension provides speed and tuning control for YouTube videos.",
     "version": "1.0",
     "permissions": [
-        "declarativeContent",
         "scripting",
         "tabs"
     ],

@@ -26,51 +26,33 @@ function urlIsVideo(url) {
     return url.startsWith("https://www.youtube.com/watch") || (url.startsWith("https://www.youtube.com/c/") && url.endsWith("/live"));
 }
 
-async function injectIntoAllTabs() {
-    const tabs = await chrome.tabs.query({});
-    tabs.forEach(async (tab) => {
-        if (urlIsVideo(tab.url)) {
-            await chrome.scripting.executeScript({
-                target: {
-                    tabId: tab.id,
-                },
-                files: ["contentScript.js"],
-            });
-        }
-    });
-}
-
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    if (changeInfo.status === "complete" && urlIsVideo(tab.url)) {
+async function updateTab(tabId, url) {
+    if (urlIsVideo(url)) {
+        await chrome.action.enable(tabId);
         await chrome.scripting.executeScript({
             target: {
                 tabId,
             },
             files: ["contentScript.js"],
         });
+    } else {
+        await chrome.action.disable(tabId);
+    }
+}
+
+async function updateAllTabs() {
+    await Promise.allSettled((await chrome.tabs.query({}))
+        .map((tab) => updateTab(tab.id, tab.url)));
+}
+
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+    if (changeInfo.url) {
+        await updateTab(tabId, changeInfo.url);
     }
 });
 
-chrome.runtime.onInstalled.addListener(async () =>
-    await injectIntoAllTabs());
-
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.action.disable();
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
-        chrome.declarativeContent.onPageChanged.addRules([{
-            conditions: [
-                new chrome.declarativeContent.PageStateMatcher({
-                    pageUrl: {urlPrefix: "https://www.youtube.com/watch?v"},
-                }),
-                new chrome.declarativeContent.PageStateMatcher({
-                    pageUrl: {
-                        urlPrefix: "https://www.youtube.com/c/",
-                        urlSuffix: "/live"
-                    },
-                })
-            ],
-            actions: [new chrome.declarativeContent.ShowAction()]
-        }]);
-    });
+chrome.runtime.onInstalled.addListener(async () => {
+    await chrome.action.disable();
+    await updateAllTabs();
 });
 
