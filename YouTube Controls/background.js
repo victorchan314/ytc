@@ -54,12 +54,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 chrome.runtime.onInstalled.addListener(async () =>
     await injectIntoAllTabs());
 
-chrome.management.onEnabled.addListener(async (info) => {
-    if (info.id === chrome.runtime.id) {
-        await injectIntoAllTabs();
-    }
-});
-
 chrome.runtime.onInstalled.addListener(() => {
     chrome.action.disable();
     chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
