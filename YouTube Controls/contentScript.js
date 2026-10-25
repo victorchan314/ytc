@@ -4,6 +4,7 @@
     }
     window.youtubeControlsLoaded = true;
 
+    const AUTO_SKIP_ADS = false;
     let wasAdShowing = false;
 
     function getVideo() {
@@ -19,25 +20,31 @@
     }
 
     async function skipSingleAd() {
-        if (isAdShowing()) {
-            console.log(`Ad source: ${getVideo().src}`);
-            let skipAdButton;
-            if (skipAdButton = document.querySelector("div.ytp-ad-skip-button-slot > span.ytp-ad-skip-button-container")) {
-                console.log("Clicking skip ad button");
-                skipAdButton.click();
+        if (!isAdShowing()) {
+            return;
+        }
+        const skipAdButton = document.querySelector(".ytp-skip-ad-button");
+        if (skipAdButton) {
+            console.log("Clicking skip ad button");
+            const timeBeforeClick = getVideo()?.currentTime;
+            skipAdButton.click();
+            await new Promise((r) => setTimeout(r, 100));
+            if (!isAdShowing() || getVideo()?.currentTime < timeBeforeClick) {
                 console.log("Clicked skip ad button");
-            } else {
-                console.log("Skipping video ad");
-                var video = getVideo();
-                video.currentTime = video.duration;
-                console.log("Skipped video ad");
+                return;
             }
+            console.log("Skip ad button had no effect");
+        }
+        const video = getVideo();
+        if (video && !Number.isNaN(video.duration)) {
+            console.log("Skipping video ad");
+            video.currentTime = video.duration;
+            console.log("Skipped video ad");
         }
     }
 
     async function skipAllAds() {
-        const start = Date.now();
-        while (isAdShowing() && Date.now() - start < 10000) {
+        for (let _ = 0; _ < 50 && isAdShowing(); _++) {
             await new Promise((r) => setTimeout(r, 100));
             await skipSingleAd();
         }
@@ -61,13 +68,16 @@
         return video.closest("#movie_player") !== null;
     }
 
-    function videoEventListener(event) {
+    async function videoEventListener(event) {
         const video = event.target;
         if (!isMainPlayer(video)) {
             return;
         }
         if (isAdShowing()) {
             wasAdShowing = true;
+            if (AUTO_SKIP_ADS) {
+                await skipAllAds();
+            }
         } else if (wasAdShowing) {
             wasAdShowing = false;
             if (video.desiredSpeed && video.playbackRate !== video.desiredSpeed) {
